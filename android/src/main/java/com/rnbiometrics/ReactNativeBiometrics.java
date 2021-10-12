@@ -94,11 +94,10 @@ public class ReactNativeBiometrics extends ReactContextBaseJavaModule {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 deleteBiometricKey();
-                KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore");
+                KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
                 KeyGenParameterSpec keyGenParameterSpec = new KeyGenParameterSpec.Builder(biometricKeyAlias, KeyProperties.PURPOSE_SIGN)
-                        .setDigests(KeyProperties.DIGEST_SHA256)
-                        .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
-                        .setAlgorithmParameterSpec(new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4))
+                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA384, KeyProperties.DIGEST_SHA512)
+                        .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
                         .setUserAuthenticationRequired(true)
                         .build();
                 keyPairGenerator.initialize(keyGenParameterSpec);
@@ -151,7 +150,7 @@ public class ReactNativeBiometrics extends ReactContextBaseJavaModule {
                                 String promptMessage = params.getString("promptMessage");
                                 String payload = params.getString("payload");
 
-                                Signature signature = Signature.getInstance("SHA256withRSA");
+                                Signature signature = Signature.getInstance("SHA256withECDSA");
                                 KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
                                 keyStore.load(null);
 
