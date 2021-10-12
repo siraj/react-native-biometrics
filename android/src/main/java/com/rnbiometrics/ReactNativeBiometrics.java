@@ -27,6 +27,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.RSAKeyGenParameterSpec;
+import java.security.spec.ECGenParameterSpec;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
