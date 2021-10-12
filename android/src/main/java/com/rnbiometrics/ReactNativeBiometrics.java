@@ -31,6 +31,9 @@ import java.security.spec.ECGenParameterSpec;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.nimbusds.jose.jwk.Curve;
+import com.nimbusds.jose.jwk.ECKey;
+
 /**
  * Created by brandon on 4/5/18.
  */
@@ -104,13 +107,15 @@ public class ReactNativeBiometrics extends ReactContextBaseJavaModule {
                 keyPairGenerator.initialize(keyGenParameterSpec);
 
                 KeyPair keyPair = keyPairGenerator.generateKeyPair();
-                PublicKey publicKey = keyPair.getPublic();
-                byte[] encodedPublicKey = publicKey.getEncoded();
-                String publicKeyString = Base64.encodeToString(encodedPublicKey, Base64.DEFAULT);
-                //publicKeyString = publicKeyString.replaceAll("\r", "").replaceAll("\n", "");
+                ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
 
+                ECKey jwk;
+                jwk = new ECKey.Builder(Curve.P_256, (ECPublicKey) publicKey).build();
+
+                String TokenAsKey = jwk.toJSONString();
                 WritableMap resultMap = new WritableNativeMap();
-                resultMap.putString("publicKey", publicKeyString);
+
+                resultMap.putString("publicKey", TokenAsKey);
                 promise.resolve(resultMap);
             } else {
                 promise.reject("Cannot generate keys on android versions below 6.0", "Cannot generate keys on android versions below 6.0");
