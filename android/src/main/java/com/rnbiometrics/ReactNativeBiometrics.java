@@ -107,7 +107,7 @@ public class ReactNativeBiometrics extends ReactContextBaseJavaModule {
                 PublicKey publicKey = keyPair.getPublic();
                 byte[] encodedPublicKey = publicKey.getEncoded();
                 String publicKeyString = Base64.encodeToString(encodedPublicKey, Base64.DEFAULT);
-                publicKeyString = publicKeyString.replaceAll("\r", "").replaceAll("\n", "");
+                //publicKeyString = publicKeyString.replaceAll("\r", "").replaceAll("\n", "");
 
                 WritableMap resultMap = new WritableNativeMap();
                 resultMap.putString("publicKey", publicKeyString);
